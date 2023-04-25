@@ -1,4 +1,5 @@
 const User = require("../models/user");
+const Expense = require("../models/expense");
 const bcrypt = require("bcrypt");
 
 exports.postAddUser =
@@ -32,20 +33,58 @@ exports.logIn =
 
     // featching the data from the database
 
-    const user = await User.findOne({ where: { name: name } });
-    const userpwd = await User.findAll({ attributes: ["password"] });
-    //console.log(userpwd[0].password);
+    const user = await User.findAll({ where: { name: name } });
+
+    //console.log(user[0].password);
     //console.log(password);
 
     // cripting he user password with database cripted password
 
-    bcrypt.compare(password, userpwd[0].password, (err, result) => {
-      if (err || !user) {
+    bcrypt.compare(password, user[0].password, function (err, result) {
+      if (err) {
+        console.log("bcrypt problem");
+      }
+      if (result === false) {
         console.log("incorrect user name or password!");
-        res.status(404).json({ mesaage: "incorrect user name or password!" });
-      } else {
+        res.status(404).json({ message: "incorrect user name or password!" });
+      }
+      if (result === true) {
         console.log("user login successfully!!");
-        res.status(201).json({ mesaage: "user login successfully!" });
+        res.status(201).json({ mesaage: "success" });
       }
     });
+  });
+
+exports.addExpense =
+  ("/user/add-Expesnse",
+  async (req, res, next) => {
+    try {
+      console.log(req.body);
+      const spentAmount = req.body.spentAmount;
+      const Description = req.body.Description;
+      const category = req.body.category;
+      const data = await Expense.create({ spentAmount, Description, category });
+      res.status(201).json({ data: data });
+    } catch (err) {
+      console.log(err);
+    }
+  });
+
+exports.getExpenses =
+  ("/user/get-Expense",
+  async (req, res, next) => {
+    const data = await Expense.findAll();
+    res.status(201).json({ data });
+  });
+
+exports.deleteExpense =
+  ("/user/delete-Expense",
+  async (req, res, next) => {
+    try {
+      const ExpenseId = req.body.id;
+      const expense = await Expense.findById(ExpenseId);
+      await expense.destroy();
+    } catch (err) {
+      console.log(err);
+    }
   });
