@@ -17,3 +17,18 @@ exports.postAddUser =
       console.log(err);
     }
   });
+exports.logIn =
+  ("/user/login",
+  async (req, res, next) => {
+    const { name, password } = req.body;
+    if (!name || !password) {
+      console.log("please enter username And password!!");
+    }
+    const user = await User.findOne({ where: { name: name } });
+
+    if (!user) {
+      console.log("incorrect user name or password!");
+    } else {
+      console.log("user login successfully!!");
+    }
+  });
