@@ -1,6 +1,7 @@
 const User = require("../models/user");
 const Expense = require("../models/expense");
 const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
 
 exports.postAddUser =
   ("/user/add-user",
@@ -23,6 +24,11 @@ exports.postAddUser =
       console.log(err);
     }
   });
+
+function generateJwtToken(id) {
+  const token = jwt.sign({ id: id }, "secretKey");
+  return token;
+}
 exports.logIn =
   ("/user/login",
   async (req, res, next) => {
@@ -35,7 +41,7 @@ exports.logIn =
 
     const user = await User.findAll({ where: { name: name } });
 
-    //console.log(user[0].password);
+    console.log(user[0].id);
     //console.log(password);
 
     // cripting he user password with database cripted password
@@ -50,7 +56,9 @@ exports.logIn =
       }
       if (result === true) {
         console.log("user login successfully!!");
-        res.status(201).json({ mesaage: "success" });
+        res
+          .status(201)
+          .json({ mesaage: "success", token: generateJwtToken(user[0].id) });
       }
     });
   });
@@ -60,10 +68,17 @@ exports.addExpense =
   async (req, res, next) => {
     try {
       console.log(req.body);
+      const userid = jwt.verify(req.body.userId, "secretKey");
+      const userId = userid.id;
       const spentAmount = req.body.spentAmount;
       const Description = req.body.Description;
       const category = req.body.category;
-      const data = await Expense.create({ spentAmount, Description, category });
+      const data = await Expense.create({
+        spentAmount,
+        Description,
+        category,
+        userId,
+      });
       res.status(201).json({ data: data });
     } catch (err) {
       console.log(err);
