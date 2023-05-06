@@ -1,0 +1,33 @@
+{
+  "name": "sharpnodepro",
+  "version": "1.0.0",
+  "description": "",
+  "main": "signUp.js",
+  "scripts": {
+    "start": " set NODE_ENV=production  set JWT_KEY=secretKey   set KEY_ID=rzp_test_XkAoLDByKnk3xu  set KEY_SECRET=fStUAMJINTnnHRcehm8mSNWw   set API_KEY=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 set BUCKET_NAME=expenses123 IAM_USER_KEY=AKIA5CKGFOIQ7YIGQ3OD    set IAM_USER_SECRET=Vi5cU6mCcBnSnfqaVJV4sCA4tIWPbd1hJ089zL/2node  app.js",
+    "start:dev": "nodemon app.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@sendgrid/mail": "^7.7.0",
+    "aws-sdk": "^2.1369.0",
+    "bcrypt": "^5.1.0",
+    "body-parser": "^1.20.2",
+    "compression": "^1.7.4",
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "helmet": "^6.1.5",
+    "jsonwebtoken": "^9.0.0",
+    "morgan": "^1.10.0",
+    "mysql2": "^3.2.3",
+    "nodemon": "^2.0.22",
+    "razorpay": "^2.8.6",
+    "sequelize": "^4.44.4",
+    "sib-api-v3-sdk": "^8.5.0",
+    "uuid": "^9.0.0"
+  }
+}
